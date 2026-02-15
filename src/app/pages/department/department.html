@@ -1,0 +1,113 @@
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+</head>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <div class="container mt-2">
+
+    <!-- Page Title -->
+    <div class="row mb-3">
+      <div class="col">
+        <h4 class="fw-bold">Department Management</h4>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row align-items-end g-3">
+
+          <!-- Department Name -->
+          <div class="col-md-3">
+            <label class="form-label">Department Name</label>
+            <input type="text" [(ngModel)]="newDepOb.departmentName" class="form-control" placeholder="Enter department">
+          </div>
+
+          <!-- Is Active -->
+          <div class="col-md-2">
+            <label class="form-label d-block">Is Active</label>
+            <div class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="newDepOb.isActive" id="isActive">
+              <label class="form-check-label" for="isActive">
+                Active
+              </label>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="col-md-3">
+            @if(newDepOb.departmentId ==0){
+              <button class="btn btn-primary me-2" (click)="onSaveDept()">
+              Save
+            </button>
+            }@else{
+              <button class="btn btn-primary me-2" (click)="onUpdateDept()">
+              Update
+            </button>}
+                          
+            <button class="btn btn-secondary" (click)="onReset()">
+              Reset
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="card">
+      <div class="card-body">
+
+        <table class="table table-bordered table-striped align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Department Name</th>
+              <th>Status</th>
+              <th style="width: 140px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of deptList; track $index){
+              <tr>
+              <td>{{$index +1}}</td>
+              <td>{{item.departmentName}}</td>
+               @if(item.isActive.toString() == 'true'){
+                  <td>
+                    <span class="badge bg-success">{{item.isActive}}</span>
+                  </td>
+                }@else{
+                  <td>
+                    <span class="badge bg-danger">{{item.isActive}}</span>
+                  </td>
+                }
+              
+              <td>              
+
+                <button class="btn btn-sm btn-warning me-1" (click)="onEditDept(item)">Edit</button>
+                <button class="btn btn-sm btn-danger" (click)="onDeltDept(item.departmentId)">Delete</button>
+              </td>
+            </tr>
+            }
+            
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+  </div>
+</div>
+
+
+
+
+  
+
+
+<script
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+</script>
