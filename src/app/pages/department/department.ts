@@ -32,10 +32,15 @@ export class Department implements OnInit{
   }
   getAllDepartments() {
     this.masterService.getAllDept().subscribe({
-      next:(result:any)=> {
-          this.deptList = result;
+      next: (result: DepartmentModel[]) => {
+        console.log('departments received', result);
+        this.deptList = result;
+      },
+      error: (err) => {
+        console.error('failed to load departments', err);
+        alert('Unable to fetch departments: ' + (err.message || err.status));
       }
-    })
+    });
   }
 
   onEditDept(dept: DepartmentModel) {

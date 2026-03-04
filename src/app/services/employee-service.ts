@@ -9,7 +9,10 @@ import { EmployeeList } from '../pages/employee-list/employee-list';
 })
 export class EmployeeService {
   
-  apiUrl: string = 'https://localhost:7168/api/';
+  //apiUrl: string = 'https://localhost:7168/api/';
+  
+  apiUrl: string = 'https://employeemanagementsystembackendapi-e5dygyamb3bpc4c6.canadacentral-01.azurewebsites.net/api/';
+  
   http = inject(HttpClient);
 
   /*Employee services start*/

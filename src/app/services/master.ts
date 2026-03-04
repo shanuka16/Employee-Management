@@ -8,13 +8,18 @@ import { DepartmentModel, DesignationListModel, DesignationModel } from '../mode
 })
 export class Master {
   
-  apiUrl: string = 'https://localhost:7168/api/';
+  //apiUrl: string = 'https://localhost:7168/api/';
+  // make sure the protocol is included; without it the browser will treat the URL as relative
+  apiUrl: string = 'https://employeemanagementsystembackendapi-e5dygyamb3bpc4c6.canadacentral-01.azurewebsites.net/api/';
   http = inject(HttpClient);
 
   /*Department services start*/
 
   getAllDept() {
-    return this.http.get(this.apiUrl+"DepartmentMaster/GetAllDepartments")
+    // specify the expected response type for better type safety
+    return this.http.get<DepartmentModel[]>(
+      this.apiUrl + "DepartmentMaster/GetAllDepartments"
+    );
   }
 
   saveDept(Obj: DepartmentModel) {

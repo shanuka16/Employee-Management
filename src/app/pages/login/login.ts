@@ -20,10 +20,8 @@ export class Login {
   http = inject(HttpClient);
   router = inject(Router);
   onLogin() {
-    debugger;
-    this.http.post('https://localhost:7168/api/EmployeeMaster/login', this.loginObj).subscribe({
+    this.http.post('https://employeemanagementsystembackendapi-e5dygyamb3bpc4c6.canadacentral-01.azurewebsites.net/api/EmployeeMaster/login', this.loginObj).subscribe({
       next: (res: any) => {
-        debugger;
         console.log('Login response:', res);
         
         // Check if response has data property, otherwise use the response directly
