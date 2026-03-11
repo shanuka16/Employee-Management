@@ -21,6 +21,12 @@ jobs:
       - name: Build
         run: npm run build --if-present
 
+      # login to Azure using a service principal
+      - name: 'Azure Login'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       # deploy step for Azure App Service
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
