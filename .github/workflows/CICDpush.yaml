@@ -1,38 +1,29 @@
-name: CI/CD Pipeline
+name: Angular CI/CD to Azure
 
 on:
-  push:
-    branches:
-      - main
+push:
+branches:
+- main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+build-and-deploy:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '22'
+steps:
+  - uses: actions/checkout@v3
 
-      - name: Install Dependencies
-        run: npm install
+  - uses: actions/setup-node@v4
+    with:
+      node-version: '20'
 
-      - name: Run Tests
-        run: npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox
+  - run: npm install
 
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+  - run: npm run build -- --configuration production
 
-      - name: Deploy
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: testThree
-          slot-name: production
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-          package: ./dist/employee-management
+  - uses: azure/webapps-deploy@v2
+    with:
+      app-name: testThree
+      publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+      package: ./dist/employee-management
+
