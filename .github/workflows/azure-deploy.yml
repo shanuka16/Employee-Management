@@ -1,0 +1,38 @@
+name: Deploy Angular App to Azure
+
+on:
+push:
+branches:
+- main
+
+env:
+AZURE_WEBAPP_NAME: testThree
+NODE_VERSION: '20'
+
+jobs:
+build-and-deploy:
+runs-on: ubuntu-latest
+
+```
+steps:
+- name: Checkout Repository
+  uses: actions/checkout@v4
+
+- name: Setup Node.js
+  uses: actions/setup-node@v4
+  with:
+    node-version: ${{ env.NODE_VERSION }}
+
+- name: Install Dependencies
+  run: npm install
+
+- name: Build Angular App
+  run: npm run build -- --configuration production
+
+- name: Deploy to Azure Web App
+  uses: azure/webapps-deploy@v3
+  with:
+    app-name: ${{ env.AZURE_WEBAPP_NAME }}
+    publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+    package: ./dist
+```
