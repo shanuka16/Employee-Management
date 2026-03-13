@@ -1,38 +1,76 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test -- --watch=false --browsers=ChromeHeadlessNoSandbox
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
+      - name: Deploy
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: testThree
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          package: ./dist/employee-management
+
+
 name: Deploy Angular App to Azure
 
 on:
-push:
-branches:
-- main
+  push:
+    branches:
+      - main
 
-env:
-AZURE_WEBAPP_NAME: testThree
-NODE_VERSION: '20'
+  env:
+    AZURE_WEBAPP_NAME: testThree
+    NODE_VERSION: '20'
 
-jobs:
-build-and-deploy:
-runs-on: ubuntu-latest
+  jobs:
+    build-and-deploy:
+    runs-on: ubuntu-latest
 
-```
-steps:
-- name: Checkout Repository
-  uses: actions/checkout@v4
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
-- name: Setup Node.js
-  uses: actions/setup-node@v4
-  with:
-    node-version: ${{ env.NODE_VERSION }}
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
 
-- name: Install Dependencies
-  run: npm install
+    - name: Install Dependencies
+      run: npm install
 
-- name: Build Angular App
-  run: npm run build -- --configuration production
+    - name: Build Angular App
+      run: npm run build -- --configuration production
 
-- name: Deploy to Azure Web App
-  uses: azure/webapps-deploy@v3
-  with:
-    app-name: ${{ env.AZURE_WEBAPP_NAME }}
-    publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-    package: ./dist
-```
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        package: ./dist/employee-management
