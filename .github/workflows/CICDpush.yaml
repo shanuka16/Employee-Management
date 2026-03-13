@@ -1,5 +1,4 @@
-# Workflow to build and deploy the app
-
+# Your complete CI/CD configuration file with the updates
 name: CI/CD Pipeline
 
 on:
@@ -11,35 +10,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'
+          node-version: '14'
 
       - name: Install Dependencies
         run: npm install
 
       - name: Run Tests
-        run: npm test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+        run: npm test -- --watch=false --browsers=ChromeHeadless --no-sandbox --disable-gpu
 
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
 
-      - name: Deploy to Azure
+      - name: Deploy
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'your-app-name'
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: .
+          app-name: testThree
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          package: .\dist\employee-management
